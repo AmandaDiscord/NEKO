@@ -1,0 +1,12 @@
+{
+  "name": "neko",
+  "version": "1.0.0",
+  "description": "A performant wrapper for Discord.js",
+  "main": "index.js",
+  "types": "./typings/index.d.ts",
+  "author": "PapiOphidian",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.x"
+  }
+}
