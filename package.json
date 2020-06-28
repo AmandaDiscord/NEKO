@@ -1,5 +1,5 @@
 {
-  "name": "neko",
+  "name": "@amanda/neko",
   "version": "1.0.0",
   "description": "A performant wrapper for Discord.js",
   "main": "index.js",
