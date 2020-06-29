@@ -17,6 +17,7 @@ class OptimizedPresenceManager extends Discord.PresenceManager {
 	 * @param {boolean} [cache]
 	 */
 	add(data, cache) {
+		if (!this.client.optimizations) return data;
 		const existing = this.cache.get(data.user.id);
 		const overrides = this.client.optimizations.presenceOverrides;
 		const bot = this.client.users.cache.get(data.user.id) ? this.client.users.cache.get(data.user.id).bot : false;
