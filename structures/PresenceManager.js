@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const Presence = require("./Presence")
 
 class OptimizedPresenceManager extends Discord.PresenceManager {
 	/**
@@ -11,18 +12,23 @@ class OptimizedPresenceManager extends Discord.PresenceManager {
 		 * @type {import("../typings").Neko}
 		 */
 		this.client;
+		/**
+		 * @type {Discord.Collection<string, import("../typings").OptimizedPresence>}
+		 */
+		this.cache;
 	}
 	/**
-	 * @param {{ user: { id: string }, guild: import("./Guild"), status: import("../typings").StatusType }} data
+	 * @param {{ user: { id: string }, guild: import("../typings").OptimizedGuild, status: import("../typings").StatusType }} data
 	 * @param {boolean} [cache]
+	 * @returns {any}
 	 */
 	add(data, cache) {
 		if (!this.client.optimizations) return data;
+		if (this.client.optimizations.presencesDisabled) return data;
 		const existing = this.cache.get(data.user.id);
 		const overrides = this.client.optimizations.presenceOverrides;
 		const bot = this.client.users.cache.get(data.user.id) ? this.client.users.cache.get(data.user.id).bot : false;
 
-		if (this.client.optimizations.presencesDisabled) return data;
 		if (overrides.length > 0) {
 			/** @type {Array<import("../typings").UserPresenceException>} */
 			// @ts-ignore
@@ -50,8 +56,12 @@ class OptimizedPresenceManager extends Discord.PresenceManager {
 			if (statusOverrides.find(ex => ex[1] === data.status && ex[2] === false)) return data;
 			if (allowedStatusesLength > 0 && !statusOverrides.find(ex => ex[1] === data.status && ex[2] === true)) return data;
 		}
-		// @ts-ignore
-		return existing ? existing.patch(data) : super.add(data, cache, { id: data.user.id });
+		return existing
+					 ? existing.patch(data)
+					 : (this.client.optimizations && this.client.optimizations.globalPresences && this.client.presences)
+					 ? this.client.presences.set(data.user.id, new Presence(this.client, data)).get(data.user.id)
+					 // @ts-ignore
+					 : super.add(data, cache, { id: data.user.id });
 	}
 }
 

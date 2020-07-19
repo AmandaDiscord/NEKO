@@ -5,7 +5,7 @@ NEKO is an add-on for Discord.js which offers misc tunings for performance gains
 Discord.js trades efficiency for ease of use which isn't bad but Discord.js has the capability of becoming competitive with Eris in terms of scalability which currently isn't widely available and requires edits of Discord.js' source by someone who knows what they're doing.
 
 # Using NEKO
-NEKO only exports 3 classes. An extension of the Client class, An extension of the Guild class and an extension of the PresenceManager class. This is intentional and is done this way to be extensible so that you are not locked into specifically using this add-on only. You will need to pass the OptimizedGuild class to the Discord.Structures extend method. Documentation here: https://discord.js.org/#/docs/main/stable/class/Structures
+NEKO only exports a few classes which are extensions of the Client, Guild, PresenceManager, Presence and Activity classes. This is intentional and is done this way to be extensible so that you are not locked into specifically using this add-on only. You will need to pass the OptimizedGuild and OptimizedPresence classes to the Discord.Structures extend method. Documentation here: https://discord.js.org/#/docs/main/stable/class/Structures
 
 You will also need to change your client's construction definition to be that of the exported class Neko or if you have your own Client modifications, you can freely extend Neko instead of the vanilla Client class and everything *should* continue to function as normal.
 
@@ -14,7 +14,7 @@ You will also need to change your client's construction definition to be that of
 As NEKO is about performance, most of the features of this add-on are not added without reason. Each one will be explained in detail here.
 
 ## Presences (The only thing added currently)
-Presences include things such as client statuses which would be what client an account is on whether it be mobile, desktop or browser. They also include Activities which is details about what an account is doing such as playing a game or listening to something. This data takes up a lot of memory and could easily make the stack size 3x of what it could be if they were just disabled.
+Presences include things such as client statuses which would be what client an account is on whether it be mobile, desktop or browser. They also include Activities which is details about what an account is doing such as playing a game or listening to something. This data takes up a lot of memory and could easily make the stack size considerably larger of what it could be if they were just disabled.
 
 https://amanda.moe/to/stats
 This link leads you to a stats graph for Amanda#8293 (A music bot). If you zoom into the Ram used graph at November 3rd, 2019, you will see that memory spiked to 608MB and then memory usage smooths out to be considerably < that. This was due to implementing a patch to disable adding Presences to a Guild's presence cache which dramatically reduced memory usage. Prior, memory would always start low then over a few days, spike up to >600MB. Amanda was hosted on a small memory size VM at the time and would often cause the process to run out of memory which explains the dips and rises in the memory graph prior to said date.

@@ -6,6 +6,14 @@ export interface NekoOptions extends Discord.ClientOptions {
 		 * Configure whether or not all presences are disabled. This global option overrides NekoOptions#presencesOverrides
 		 */
 		disablePresences?: boolean;
+		/**
+		 * Configure whether Activities should contain RichPresence data.
+		 */
+		disableRichPresences?: boolean;
+		/**
+		 * Configure whether Guild Presence caches should be empty in favor of a global Presence cache on the Client
+		 */
+		globalPresences?: boolean;
 		presenceOverrides?: Array<PresenceException>;
 	};
 }
@@ -40,13 +48,18 @@ export class Neko extends Discord.Client {
 
 	public optimizations: {
 		presencesDisabled: boolean;
+		richPresencesDisabled: boolean;
+		globalPresences: boolean;
 		presenceOverrides: Array<PresenceException>;
 	};
+
+	presences: Discord.Collection<string, OptimizedPresence>;
 }
 export class OptimizedPresenceManager extends Discord.PresenceManager {
 	constructor(client: Neko, iterable?: Iterable<any>);
 
 	public client: Neko;
+	public cache: Discord.Collection<string, OptimizedPresence>;
 
 	public add(data: any, cache?: boolean): any;
 }
@@ -54,4 +67,18 @@ export class OptimizedGuild extends Discord.Guild {
 	constructor(client: Neko, data: any);
 
 	public presences: OptimizedPresenceManager;
+}
+
+export class OptimizedPresence extends Discord.Presence {
+	constructor(client: Neko, data: any);
+
+	public client: Neko;
+
+	public patch(data): this;
+}
+
+export class OptimizedActivity extends Discord.Activity {
+	constructor(presence: OptimizedPresence, data: any);
+
+	public presence: OptimizedPresence;
 }
