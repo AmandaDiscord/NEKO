@@ -81,4 +81,13 @@ export class OptimizedActivity extends Discord.Activity {
 	constructor(presence: OptimizedPresence, data: any);
 
 	public presence: OptimizedPresence;
+	public syncID: string;
+}
+
+export class OptimizedUser {
+	constructor(client: Neko, data: any);
+
+	public client: Neko;
+
+	public presence: OptimizedPresence;
 }

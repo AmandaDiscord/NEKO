@@ -5,7 +5,7 @@ NEKO is an add-on for Discord.js which offers misc tunings for performance gains
 Discord.js trades efficiency for ease of use which isn't bad but Discord.js has the capability of becoming competitive with Eris in terms of scalability which currently isn't widely available and requires edits of Discord.js' source by someone who knows what they're doing.
 
 # Using NEKO
-NEKO only exports a few classes which are extensions of the Client, Guild, PresenceManager, Presence and Activity classes. This is intentional and is done this way to be extensible so that you are not locked into specifically using this add-on only. You will need to pass the OptimizedGuild and OptimizedPresence classes to the Discord.Structures extend method. Documentation here: https://discord.js.org/#/docs/main/stable/class/Structures
+NEKO only exports a few classes which are extensions of the Client, Guild, PresenceManager, Presence, User and Activity classes. This is intentional and is done this way to be extensible so that you are not locked into specifically using this add-on only. You will need to pass the OptimizedGuild, OptimizedPresence and OptimizedUser classes to the Discord.Structures extend method. Documentation here: https://discord.js.org/#/docs/main/stable/class/Structures
 
 You will also need to change your client's construction definition to be that of the exported class Neko or if you have your own Client modifications, you can freely extend Neko instead of the vanilla Client class and everything *should* continue to function as normal.
 
