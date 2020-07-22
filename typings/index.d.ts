@@ -3,7 +3,7 @@ import Discord = require("discord.js");
 export interface NekoOptions extends Discord.ClientOptions {
 	optimizations?: {
 		/**
-		 * Configure whether or not all presences are disabled. This global option overrides NekoOptions#presencesOverrides
+		 * Configure whether or not all presences are disabled. This global option overrides NekoOptions#presencesOverrides.
 		 */
 		disablePresences?: boolean;
 		/**
@@ -11,7 +11,8 @@ export interface NekoOptions extends Discord.ClientOptions {
 		 */
 		disableRichPresences?: boolean;
 		/**
-		 * Configure whether Guild Presence caches should be empty in favor of a global Presence cache on the Client
+		 * Configure whether Guild Presence caches should be empty in favor of a global Presence cache on the Client,
+		 * removing a lot of Presence duplication.
 		 */
 		globalPresences?: boolean;
 		presenceOverrides?: Array<PresenceException>;

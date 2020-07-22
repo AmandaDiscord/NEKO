@@ -9,6 +9,29 @@ NEKO only exports a few classes which are extensions of the Client, Guild, Prese
 
 You will also need to change your client's construction definition to be that of the exported class Neko or if you have your own Client modifications, you can freely extend Neko instead of the vanilla Client class and everything *should* continue to function as normal.
 
+To benefit from this add-on, you will need to pass special options to the client constructor. This is the def for the options
+```ts
+interface NekoOptions extends Discord.ClientOptions {
+	optimizations?: {
+		/**
+		 * Configure whether or not all presences are disabled. This global option overrides NekoOptions#presencesOverrides.
+		 */
+		disablePresences?: boolean;
+		/**
+		 * Configure whether Activities should contain RichPresence data.
+		 */
+		disableRichPresences?: boolean;
+		/**
+		 * Configure whether Guild Presence caches should be empty in favor of a global Presence cache on the Client,
+		 * removing a lot of Presence duplication.
+		 */
+		globalPresences?: boolean;
+		presenceOverrides?: Array<PresenceException>;
+	};
+}
+```
+Please use VSCode's intellisense or other intellisense alternatives to determine how to use the PresenceException. Or look at the typings located at /typings/index.d.ts
+
 
 # Recommendations
 As NEKO is about performance, most of the features of this add-on are not added without reason. Each one will be explained in detail here.
