@@ -4,6 +4,16 @@
   "description": "A performance add-on for Discord.js",
   "main": "index.js",
   "types": "./typings/index.d.ts",
+  "exports": {
+    ".": [
+      {
+        "require": "./index.js",
+        "import": "./esm/neko.mjs"
+      },
+      "./index.js"
+    ],
+    "./esm": "./esm/neko.mjs"
+  },
   "author": "PapiOphidian",
   "license": "MIT",
   "dependencies": {
