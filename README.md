@@ -4,8 +4,14 @@ NEKO is an add-on for Discord.js which offers misc tunings for performance gains
 # Why NEKO?
 Discord.js trades efficiency for ease of use which isn't bad but Discord.js has the capability of becoming competitive with Eris in terms of scalability which currently isn't widely available and requires edits of Discord.js' source by someone who knows what they're doing.
 
+# ESModule/TypeScript Notice
+NEKO has ESM/import statement support but discord.js does not properly support ESM when it comes to their Structures class mentioned below.
+You can view the relevant issue [here](https://github.com/discordjs/discord.js/issues/4670).
+
+To properly use this module with ESM/import, you must use the require statement to require discord.js. You can still import NEKO like you normally would.
+
 # Using NEKO
-NEKO only exports a few classes which are extensions of the Client, Guild, PresenceManager, Presence, User and Activity classes. This is intentional and is done this way to be extensible so that you are not locked into specifically using this add-on only. You will need to pass the OptimizedGuild, OptimizedPresence and OptimizedUser classes to the Discord.Structures extend method. Documentation here: https://discord.js.org/#/docs/main/stable/class/Structures
+NEKO only exports a few classes which are extensions of the Client, Guild, PresenceManager, Presence, User and Activity classes. This is intentional and is done this way to be extensible so that you are not locked into specifically using this add-on only. You will need to pass the OptimizedGuild, OptimizedPresence and OptimizedUser classes to the Discord.Structures extend method. Documentation [here](https://discord.js.org/#/docs/main/stable/class/Structures)
 
 You will also need to change your client's construction definition to be that of the exported class Neko or if you have your own Client modifications, you can freely extend Neko instead of the vanilla Client class and everything *should* continue to function as normal.
 
@@ -49,7 +55,7 @@ This is a link to the commit of a modified fork of Discord.js which is a few day
 Users can take up a considerable amount of memory. We obviously do not limit the amount of users which can be cached at one point since that would break a lot of functionality but as a word of advice, if you do not ABSOLUTELY need the priviledged intents of Discord, do not use them. Working around not having most users cached until they send a message or are mentioned or somehow end up in cache will be a slight pain but things are not so bad. It's a small price to pay for ~~salvation~~ not blowing the entire allocated memory space.
 
 ## Messages
-This is one of those things where I have heard a lot of people say that they take up quite a bit of space in memory but I have never actually witnessed the affects of before and after. For now, I'll say that if you do not do anything with the channel's message history, you should set the channels max message size to 0. This comes with it's own problems, however. You will not be able to react to uncached messages (I believe) and you will not be able to receive the messageUpdate Client event unless a message which gets edited is somehow already in the cache prior to the event.
+This is one of those things where I have heard a lot of people say that they take up quite a bit of space in memory but I have never actually witnessed the affects of before and after. For now, I'll say that if you do not do anything with the channel's message history, you should set the channels max message size to 0. This comes with it's own problems, however. You will not be able to react to uncached messages (I believe) and you will not be able to receive the messageUpdate, messageReactionAdd or the messageReactionRemove Client events unless a message which gets edited/reacted to is somehow already in the cache prior to the event.
 
 
 # Conclusion
