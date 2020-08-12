@@ -8,6 +8,7 @@ class NekoActionsManager extends ActionManager {
 		super(client);
 		this.register(require("./MessageUpdate"));
 		this.register(require("./MessageReactionAdd"));
+		this.register(require("./MessageReactionRemove"));
 	}
 }
 
