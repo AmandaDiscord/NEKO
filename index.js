@@ -1,4 +1,4 @@
-const Neko = require("./structures/Client.js");
+const Neko = require("./structures/client/Client.js");
 const OptimizedGuild = require("./structures/Guild.js");
 const OptimizedPresenceManager = require("./structures/PresenceManager.js");
 const OptimizedPresence = require("./structures/Presence.js");

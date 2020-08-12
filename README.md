@@ -4,6 +4,8 @@ NEKO is an add-on for Discord.js which offers misc tunings for performance gains
 # Why NEKO?
 Discord.js trades efficiency for ease of use which isn't bad but Discord.js has the capability of becoming competitive with Eris in terms of scalability which currently isn't widely available and requires edits of Discord.js' source by someone who knows what they're doing.
 
+This module is still a work in progress and currently only provides means of disabling some Discord.js functionality without modifying the data structure too much. This does not exactly tackle the optimization issues completely but provides some form of cache control.
+
 # ESModule/TypeScript Notice
 NEKO has ESM/import statement support but discord.js does not properly support ESM when it comes to their Structures class mentioned below.
 You can view the relevant issue [here](https://github.com/discordjs/discord.js/issues/4670).
@@ -33,6 +35,10 @@ interface NekoOptions extends Discord.ClientOptions {
 		 */
 		globalPresences?: boolean;
 		presenceOverrides?: Array<PresenceException>;
+		/**
+		 * Configure whether channel max message caching should be set to 0 and still allow message related events to be emitted with a possibly different data structure.
+		 */
+		disableMessageCaching?: boolean;
 	};
 }
 ```
@@ -42,7 +48,7 @@ Please use VSCode's intellisense or other intellisense alternatives to determine
 # Recommendations
 As NEKO is about performance, most of the features of this add-on are not added without reason. Each one will be explained in detail here.
 
-## Presences (The only thing added currently)
+## Presences (partial optimizations implemented)
 Presences include things such as client statuses which would be what client an account is on whether it be mobile, desktop or browser. They also include Activities which is details about what an account is doing such as playing a game or listening to something. This data takes up a lot of memory and could easily make the stack size considerably larger of what it could be if they were just disabled.
 
 https://amanda.moe/to/stats
@@ -51,12 +57,20 @@ This link leads you to a stats graph for Amanda#8293 (A music bot). If you zoom 
 https://github.com/AmandaDiscord/discord.js/commit/84b6b6ca039920b7866cba1dbffe422f022b1560
 This is a link to the commit of a modified fork of Discord.js which is a few days before the memory issues calmed down which has relative code of Discord.js v12 modifications prior to the Manager PR. There are no commits after the commit's date and before Nov 6th, 2019 (when memory issues were fixed) which have actual code base changes.
 
-## Users in general
+## Messages (partial optimizations implemented)
+Messages can actially take up quite a bit of memory since Discord.js holds every message in cache by default and stores old instances of Messages in an edits Array. This data is not particularly necessary and you could set the ClientOptions.messageCacheMaxSize to 0 but ClientEvents such as messageUpdate, messageReactionAdd and messageReactionRemove would not emit since they depend on cached messages. Setting the NekoOptions.disableMessageCaching to true will set the messageCacheMaxSize to 0 and will modify the Client's ActionManager to allow for events to be emitted but the data structure will be different. If you would like to create an instanceof Discord.Message from the data emitted by the modified messageUpdate event, this code can be helpful:
+```js
+if (data && data.id && data.channel_id && data.content && data.author) {
+	const channel = client.channels.cache.get(data.channel_id)
+	// ensure channel is a message channel, and ensure member exists if is a guild channel
+	if (channel instanceof Discord.DMChannel || (channel instanceof Discord.TextChannel && data.member)) {
+		const message = new Discord.Message(client, data, channel)
+	}
+}
+```
+
+## Users (partial optimizations implemented relating to Presences)
 Users can take up a considerable amount of memory. We obviously do not limit the amount of users which can be cached at one point since that would break a lot of functionality but as a word of advice, if you do not ABSOLUTELY need the priviledged intents of Discord, do not use them. Working around not having most users cached until they send a message or are mentioned or somehow end up in cache will be a slight pain but things are not so bad. It's a small price to pay for ~~salvation~~ not blowing the entire allocated memory space.
-
-## Messages
-This is one of those things where I have heard a lot of people say that they take up quite a bit of space in memory but I have never actually witnessed the affects of before and after. For now, I'll say that if you do not do anything with the channel's message history, you should set the channels max message size to 0. This comes with it's own problems, however. You will not be able to react to uncached messages (I believe) and you will not be able to receive the messageUpdate, messageReactionAdd or the messageReactionRemove Client events unless a message which gets edited/reacted to is somehow already in the cache prior to the event.
-
 
 # Conclusion
 That's about it. These are all of the optimization tips I can currently offer. If you have any personal optimization tips, feel free to hit me up on Discord (PapiOphidian#0110) and I'll try my best to implement them here into a format which is extensible and intuitive.
