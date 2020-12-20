@@ -1,12 +1,14 @@
 const Discord = require("discord.js");
 const Presence = require("./Presence")
 
+// @ts-ignore
 class OptimizedPresenceManager extends Discord.PresenceManager {
 	/**
 	 * @param {import("../typings").Neko} client
 	 * @param {Iterable<any>} [iterable]
 	 */
 	constructor(client, iterable) {
+		// @ts-ignore
 		super(client, iterable);
 		/**
 		 * @type {import("../typings").Neko}
@@ -59,6 +61,7 @@ class OptimizedPresenceManager extends Discord.PresenceManager {
 		return existing
 					 ? existing.patch(data)
 					 : (this.client.optimizations && this.client.optimizations.globalPresences && this.client.presences)
+					 // @ts-ignore
 					 ? this.client.presences.set(data.user.id, new Presence(this.client, data)).get(data.user.id)
 					 // @ts-ignore
 					 : super.add(data, cache, { id: data.user.id });

@@ -1,4 +1,7 @@
-const ActionManager = require("discord.js/src/client/actions/ActionsManager");
+const path = require("path");
+const djsDir = path.dirname(require.resolve("discord.js"));
+/** @type {typeof import("discord.js/src/client/actions/ActionsManager")} */
+const ActionManager = require(`${djsDir}/client/actions/ActionsManager`);
 
 class NekoActionsManager extends ActionManager {
 	/**
